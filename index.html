@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HemoCascade: Genome/Disease Dashboard</title>
+    <meta
+      name="description"
+      content="HemoCascade: Genome/Disease Dashboard for SHBIO02 GBIO2 research project on malaria and hemoglobin pathology."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="auth-screen" class="auth-screen">
+      <div class="auth-panel">
+        <div class="auth-visual">
+          <div class="glass-orb orb-one"></div>
+          <div class="glass-orb orb-two"></div>
+          <div class="dna-scene" aria-hidden="true">
+            <div class="helix helix-one"></div>
+            <div class="helix helix-two"></div>
+            <div class="helix helix-three"></div>
+            <div class="particle particle-a"></div>
+            <div class="particle particle-b"></div>
+            <div class="particle particle-c"></div>
+            <div class="particle particle-d"></div>
+          </div>
+          <div class="brand-block">
+            <div class="eyebrow">Genome / Disease Platform</div>
+            <h1>HemoCascade</h1>
+            <p>
+              An interactive research dashboard mapping the central dogma, host-pathogen
+              dynamics, and the evidence behind malaria-induced hemoglobin pathology.
+            </p>
+          </div>
+        </div>
+
+        <div class="auth-form-panel">
+          <div class="auth-header">
+            <div class="logo-badge">HC</div>
+            <div>
+              <span class="mini-label">Research workspace</span>
+              <h2>Access dashboard</h2>
+            </div>
+          </div>
+
+          <div class="auth-tabs" role="tablist" aria-label="Authentication toggle">
+            <button class="auth-tab active" data-auth-tab="signin" type="button">Sign In</button>
+            <button class="auth-tab" data-auth-tab="signup" type="button">Create Account</button>
+          </div>
+
+          <form id="auth-form" novalidate>
+            <div id="fullNameField" class="field hidden">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" name="fullName" type="text" placeholder="Dr. Alex Rivera" />
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="name@lab.edu" required />
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="••••••••" required />
+            </div>
+
+            <div class="auth-actions">
+              <button id="auth-submit" type="submit" class="primary-btn">Sign In</button>
+              <button type="button" id="guest-login" class="secondary-btn">Continue as Guest / Evaluator</button>
+            </div>
+
+            <div id="auth-message" class="auth-message" role="alert" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="app-shell" class="app-shell hidden">
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <div class="brand-mark">
+            <span>H</span>
+          </div>
+          <div>
+            <h3>HemoCascade</h3>
+            <small>GBIO2</small>
+          </div>
+        </div>
+
+        <div class="profile-badge">
+          <div class="avatar" id="sidebar-avatar">GE</div>
+          <div>
+            <strong id="sidebar-user-name">Guest Evaluator</strong>
+            <span id="sidebar-score">Quiz score: 0/7</span>
+          </div>
+        </div>
+
+        <div class="nav-progress">
+          <div class="nav-progress-top">
+            <span>Research progress</span>
+            <span id="nav-progress-value">0%</span>
+          </div>
+          <div class="progress-track"><span id="progress-fill"></span></div>
+        </div>
+
+        <nav class="nav-links" aria-label="Primary navigation">
+          <button class="nav-link active" data-target="overview">Overview</button>
+          <button class="nav-link" data-target="transcribe">Bioinformatics Playground</button>
+          <button class="nav-link" data-target="cascade">Central Dogma Visualizer</button>
+          <button class="nav-link" data-target="quiz">Knowledge Check</button>
+          <div class="section-nav-label">Paper sections</div>
+          <button class="nav-link section-link" data-target="section-1">Section 1</button>
+          <button class="nav-link section-link" data-target="section-2">Section 2</button>
+          <button class="nav-link section-link" data-target="section-3">Section 3</button>
+          <button class="nav-link section-link" data-target="section-4">Section 4</button>
+          <button class="nav-link section-link" data-target="section-5">Section 5</button>
+          <button class="nav-link section-link" data-target="section-6">Section 6</button>
+          <button class="nav-link section-link" data-target="section-7">Section 7</button>
+          <button class="nav-link section-link" data-target="section-8">Section 8</button>
+          <button class="nav-link section-link" data-target="section-9">Section 9</button>
+          <button class="nav-link section-link" data-target="section-10">Section 10</button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="project-meta">
+            <span>Project</span>
+            <strong>SHBIO02 GBIO2</strong>
+          </div>
+          <div class="authors">
+            <span>Authors</span>
+            <strong>Abania, Anthony Edsel M.; Amoy, Janzelle Rendon O.; Borja, Jermaine Bryce</strong>
+          </div>
+          <div class="project-meta">
+            <span>Institution</span>
+            <strong>Grade 12 Biology Research Group</strong>
+          </div>
+          <button id="citation-btn" class="export-btn" type="button">Export PDF / Download Citation</button>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="breadcrumb-group">
+            <button id="sidebar-toggle" class="icon-btn" type="button" aria-label="Toggle sidebar">☰</button>
+            <div class="breadcrumbs">
+              <span>HemoCascade</span>
+              <span class="crumb-divider">/</span>
+              <span id="current-section-label">Overview</span>
+            </div>
+          </div>
+
+          <label class="search-shell" aria-label="Search paper citations">
+            <span>⌕</span>
+            <input id="paper-search" type="search" placeholder="Search citations, genes, proteins, and symptoms..." />
+          </label>
+
+          <div class="header-user">
+            <div class="music-widget" aria-label="Background music controls">
+              <button id="music-toggle" class="icon-btn music-btn" type="button" aria-label="Toggle music">♫</button>
+              <select id="music-select" aria-label="Choose background music style">
+                <option value="ambient">Ambient</option>
+                <option value="neon">Neon Pulse</option>
+                <option value="calm">Calm Drift</option>
+                <option value="off">Off</option>
+              </select>
+              <label class="music-volume" aria-label="Music volume">
+                <span>Vol</span>
+                <input id="music-volume" type="range" min="0" max="100" step="5" value="35" />
+              </label>
+            </div>
+            <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle light and dark mode">☼</button>
+            <div class="user-pill">
+              <div class="avatar small" id="header-avatar">GE</div>
+              <div>
+                <strong id="header-user-name">Guest Evaluator</strong>
+                <span id="header-score">Quiz: 0/7</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="content-stack">
+          <section id="overview" class="content-panel active-panel">
+            <div class="hero-panel panel-surface">
+              <div class="hero-text">
+                <div class="tag">Central dogma | host-pathogen biology | hemoglobin</div>
+                <h1>Malaria as a parasite-driven disruption of normal erythrocyte physiology</h1>
+                <p>
+                  This dashboard traces the disease through the human red blood cell cytoplasm, the HBB gene,
+                  hemoglobin production, and the proteolytic pathway that turns an essential protein into a nutrient source for Plasmodium falciparum.
+                </p>
+              </div>
+              <div class="hero-stats">
+                <div class="stat-block">
+                  <span>Species</span>
+                  <strong>P. falciparum</strong>
+                </div>
+                <div class="stat-block">
+                  <span>Host target</span>
+                  <strong>RBC cytoplasm</strong>
+                </div>
+                <div class="stat-block">
+                  <span>Primary nutrient</span>
+                  <strong>Hemoglobin</strong>
+                </div>
+                <div class="stat-block">
+                  <span>Clinical burden</span>
+                  <strong>282M cases</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="insight-row">
+              <article class="panel-surface impact-card">
+                <span class="mini-kicker">Key insight</span>
+                <h3>Malaria is not a host DNA mutation.</h3>
+                <p>The disease is caused by parasite invasion and proteolysis of hemoglobin in the red blood cell cytoplasm.</p>
+              </article>
+              <article class="panel-surface impact-card">
+                <span class="mini-kicker">Evidence chain</span>
+                <h3>Gene → mRNA → protein → pathology</h3>
+                <p>HBB makes beta-globin, which supports oxygen transport until the parasite digests it for nutrients.</p>
+              </article>
+              <article class="panel-surface impact-card">
+                <span class="mini-kicker">Clinical impact</span>
+                <h3>Fever, anemia, and severe complications</h3>
+                <p>Rupture of infected cells and inflammatory responses drive the symptoms seen in severe malaria.</p>
+              </article>
+            </div>
+
+            <div class="fact-strip panel-surface" aria-live="polite">
+              <div class="fact-header">
+                <span class="mini-kicker">Research highlights</span>
+                <button class="chip-btn fact-next" type="button">Next finding</button>
+              </div>
+              <div class="fact-content">
+                <span class="fact-badge">01</span>
+                <p id="rotating-fact">The parasite consumes host hemoglobin after invading the erythrocyte, not by altering the host genome.</p>
+              </div>
+            </div>
+
+            <div class="summary-grid">
+              <article class="panel-surface mini-card accent-navy interactive-card" data-target="section-1" tabindex="0" role="button" aria-label="Open Section 1">
+                <span class="mini-kicker">Section 1</span>
+                <h3>Malaria disease definition</h3>
+                <p>Vector-transmitted disease caused by Plasmodium protozoa via infected Anopheles mosquito bites.</p>
+              </article>
+
+              <article class="panel-surface mini-card accent-teal interactive-card" data-target="section-4" tabindex="0" role="button" aria-label="Open Section 4">
+                <span class="mini-kicker">Section 4</span>
+                <h3>Gene context</h3>
+                <p>HBB encodes beta-globin, and malaria is not caused by mutation of host DNA.</p>
+              </article>
+
+              <article class="panel-surface mini-card accent-coral interactive-card" data-target="section-5" tabindex="0" role="button" aria-label="Open Section 5">
+                <span class="mini-kicker">Section 5</span>
+                <h3>Protein target</h3>
+                <p>Adult hemoglobin contains two alpha chains and two beta chains bound to heme.</p>
+              </article>
+
+              <article class="panel-surface mini-card accent-purple interactive-card" data-target="section-7" tabindex="0" role="button" aria-label="Open Section 7">
+                <span class="mini-kicker">Section 7</span>
+                <h3>Protease cascade</h3>
+                <p>Plasmepsin I, falcipains, falcilysin, DPAP1, and aminopeptidases degrade hemoglobin post-translationally.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="transcribe" class="content-panel">
+            <div class="panel-surface tool-panel">
+              <div class="section-head">
+                <div>
+                  <span class="eyebrow">Tool</span>
+                  <h2>Live Transcribe & Translate</h2>
+                </div>
+                <div class="preset-row">
+                  <button class="chip-btn preset-btn" data-preset="normal" type="button">Normal HBB Excerpt</button>
+                  <button class="chip-btn preset-btn" data-preset="sickle" type="button">Sickle Cell Variant (HbS)</button>
+                </div>
+              </div>
+
+              <div class="transcribe-layout">
+                <div class="sequence-entry">
+                  <label for="dna-input">DNA coding strand (5' → 3')</label>
+                  <textarea id="dna-input" spellcheck="false">ATGGTGCACCTGACTCCTGAGGAGAAG</textarea>
+                </div>
+                <div class="result-stack">
+                  <div class="result-tile">
+                    <div class="tile-header">
+                      <span>Template strand</span>
+                      <button class="copy-btn" data-copy-target="template-strand" type="button">Copy</button>
+                    </div>
+                    <code id="template-strand" class="sequence-output">3'-TAC CAC GTG GAC TGA GGA CTC CTC TTC-5'</code>
+                  </div>
+                  <div class="result-tile">
+                    <div class="tile-header">
+                      <span>mRNA strand</span>
+                      <button class="copy-btn" data-copy-target="mrna-strand" type="button">Copy</button>
+                    </div>
+                    <code id="mrna-strand" class="sequence-output">5'-AUG GUG CAC CUG ACU CCU GAG GAG AAG-3'</code>
+                  </div>
+                  <div class="result-tile">
+                    <div class="tile-header">
+                      <span>Codons</span>
+                      <button class="copy-btn" data-copy-target="codon-list" type="button">Copy</button>
+                    </div>
+                    <div id="codon-list" class="codon-block"></div>
+                  </div>
+                  <div class="result-tile">
+                    <div class="tile-header">
+                      <span>Amino acid sequence</span>
+                      <button class="copy-btn" data-copy-target="aa-sequence" type="button">Copy</button>
+                    </div>
+                    <code id="aa-sequence" class="sequence-output">Met-Val-His-Leu-Thr-Pro-Glu-Glu-Lys</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="cascade" class="content-panel">
+            <div class="panel-surface tool-panel">
+              <div class="section-head">
+                <div>
+                  <span class="eyebrow">Interactive model</span>
+                  <h2>Play the Cascade</h2>
+                </div>
+                <div class="controls-row">
+                  <button class="chip-btn" id="play-toggle" type="button">Play</button>
+                  <button class="chip-btn" id="prev-step" type="button">Previous</button>
+                  <button class="chip-btn" id="next-step" type="button">Next</button>
+                  <div class="speed-control">
+                    <label>Speed</label>
+                    <select id="speed-control">
+                      <option value="1000">1x</option>
+                      <option value="500">2x</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div id="cascade-visual" class="cascade-visual" aria-live="polite"></div>
+              <div id="cascade-detail" class="cascade-detail panel-surface inset-panel"></div>
+            </div>
+          </section>
+
+          <section id="quiz" class="content-panel">
+            <div class="panel-surface tool-panel quiz-panel">
+              <div class="section-head">
+                <div>
+                  <span class="eyebrow">Assessment</span>
+                  <h2>Knowledge Check Quiz</h2>
+                </div>
+              </div>
+
+              <div id="quiz-container"></div>
+            </div>
+          </section>
+
+          <section id="section-1" class="paper-section content-panel section-paper" data-section-title="Section 1 — Name of the Disease">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 1</span>
+                  <h2>Name of the Disease</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-1" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"Malaria is a vector-transmitted infectious disease caused by parasitic protozoa of the genus Plasmodium, spread through the bite of an infected female Anopheles mosquito (WHO, 2025). The name comes from the Italian mala aria, 'bad air,' reflecting the old belief that swamp air caused the disease; the actual parasite was identified in 1880 by French physician Charles Louis Alphonse Laveran, and mosquito-borne transmission was confirmed by Ronald Ross in 1897.</p>
+                <p>Of the five Plasmodium species that infect humans, P. falciparum causes the most severe disease and the overwhelming majority of deaths — about 282 million cases and 610,000 deaths worldwide in 2024, concentrated mainly in Africa (WHO, 2025). Unlike inherited disorders, malaria has no basis in the human genetic code; its pathology begins the moment the parasite enters a red blood cell and starts consuming its contents (Poespoprodjo et al., 2023)."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-2" class="paper-section content-panel section-paper" data-section-title="Section 2 — Affected Organelle">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 2</span>
+                  <h2>Affected Organelle</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-2" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"The cytoplasm of the human erythrocyte is what malaria affects. Strictly, it isn't a true organelle — it's the only compartment left after the cell sheds its nucleus and most membrane-bound organelles during maturation (Alberts et al., 2022). It's composed mainly of hemoglobin, glycolytic enzymes, and ions (Cowman et al., 2012; Molina-Franky et al., 2022).</p>
+                <p>Why it's affected: hemoglobin is the parasite's primary nutrient source (Olszewski et al., 2022; Francis et al., 1997). How it's affected: the parasite ingests host cytoplasm through a structure called the cytostome, delivers it to an acidic digestive vacuole, and breaks hemoglobin down with a cascade of proteases; most of the resulting heme is detoxified into hemozoin, but the fraction that escapes drives oxidative damage and hemolysis (Goldberg et al., 1991; Goldberg, 2020; Rocamora et al., 2021)."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-3" class="paper-section content-panel section-paper" data-section-title="Section 3 — Normal Function of the Organelle">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 3</span>
+                  <h2>Normal Function of the Organelle</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-3" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"In a healthy erythrocyte, the cytoplasm holds hemoglobin — which binds oxygen in the lungs and releases it in peripheral tissue — and the glycolytic enzymes that generate the cell's entire ATP supply, since a mature RBC has no mitochondria (Vander Jagt et al., 2020; Olszewski et al., 2022).</p>
+                <p>About ninety-five percent of the cytoplasm's protein content is hemoglobin alone (Olszewski et al., 2022) — part of why the parasite treats it as a ready-made food source."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-4" class="paper-section content-panel section-paper" data-section-title="Section 4 — Gene Responsible">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 4</span>
+                  <h2>Gene Responsible</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-4" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"Malaria has no gene of its own causing it the way adrenoleukodystrophy traces to ABCD1 — it's an infection driven by the parasite's biology, not a human genetic defect (Poespoprodjo et al., 2023). Unlike sickle cell anemia, where a single substitution in HBB (GAG→GTG) permanently changes the protein, P. falciparum causes no mutation at all; the host keeps producing entirely normal hemoglobin throughout infection (Francis et al., 1997; Goldberg et al., 2020).</p>
+                <p>HBB — the beta-globin gene on chromosome 11 (11p15.4) — is used here as the reference gene, since it encodes the protein malaria targets (GeneCards, n.d.; OMIM, n.d.). Some inherited traits do influence risk without causing the disease: sickle cell trait, for instance, measurably reduces the parasite's ability to establish itself in the cytoplasm (Fofana et al., 2023)."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-5" class="paper-section content-panel section-paper" data-section-title="Section 5 — Protein Produced by the Gene">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 5</span>
+                  <h2>Protein Produced by the Gene</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-5" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"HBB encodes beta-globin, half of adult hemoglobin (HbA): two alpha-globin chains (141 aa each, HBA1/HBA2, chromosome 16) and two beta-globin chains (146 aa each, HBB, chromosome 11), each holding one heme group for reversible oxygen binding (GeneCards, n.d.).</p>
+                <p>This is the protein 'affected' in malaria — not through mutation, but because the finished, correctly folded protein becomes the parasite's primary amino acid source once infection begins (Francis et al., 1997)."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-6" class="paper-section content-panel section-paper" data-section-title="Section 6 — Symptoms">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 6</span>
+                  <h2>Symptoms</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-6" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"Symptoms track the parasite's invade-digest-rupture cycle. Roughly every 48 hours, schizonts rupture synchronously, releasing merozoites and waste that trigger pyrogenic cytokines (TNF-α, IL-1, IL-6), producing the fever, chills, and sweating of a malarial paroxysm (WHO, 2025).</p>
+                <p>RBC destruction outpaces replacement, causing anemia as splenic macrophages clear damaged cells alongside parasitized ones (Milner et al., 2024). In severe cases, the surface protein PfEMP1 binds host receptors (CD36, ICAM-1), causing infected cells to stick to cerebral capillaries — producing cerebral malaria, seizures, and respiratory distress elsewhere (White, 2011)."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-7" class="paper-section content-panel section-paper" data-section-title="Section 7 — Cause of the Protein's Malfunction">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 7</span>
+                  <h2>Cause of the Protein's Malfunction</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-7" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"With no mutation involved, the cause is two-stage: getting hemoglobin out of the cytoplasm, then tearing it apart. P. falciparum forms a cytostome that pinches off vesicles of host cytoplasm, fusing them with its acidic digestive vacuole (pH 5.0–5.4) (Goldberg et al., 1991; Wiser, 2024).</p>
+                <p>Plasmepsin I makes the first cut at the alpha-globin hinge (Phe33–Leu34); falcipain-2/2′/3 cleave in parallel at multiple sites; falcilysin reduces fragments to oligopeptides; DPAP1 and aminopeptidases finish the job into free amino acids (Banerjee et al., 2002; Subramanian et al., 2009; Eggleson et al., 1999; Klemba et al., 2004). None of this touches the gene or its codons — it's entirely post-translational."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-8" class="paper-section content-panel section-paper" data-section-title="Section 8 — Analysis of the DNA Sequence">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 8</span>
+                  <h2>Analysis of the DNA Sequence</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-8" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"Since no mutation occurs, this works backward from hemoglobin's known amino acid sequence to its DNA (NCBI RefSeq NM_000518.5). RNA polymerase reads the template strand 3′→5′, synthesizing mRNA 5′→3′ by complementary base-pairing (A↔U, T↔A, C↔G, G↔C); the ribosome then reads that mRNA in triplets to assemble the amino acid chain shown below, with the start methionine cleaved off the mature protein (Alberts et al., 2022)."</p>
+                <pre class="sequence-block">Coding (sense):   5'-ATG GTG CAC CTG ACT CCT GAG GAG AAG-3'
+Template:         3'-TAC CAC GTG GAC TGA GGA CTC CTC TTC-5'
+mRNA:             5'-AUG GUG CAC CUG ACU CCU GAG GAG AAG-3'
+Codon table:      AUG=Met(start) GUG=Val CAC=His CUG=Leu ACU=Thr CCU=Pro GAG=Glu GAG=Glu AAG=Lys</pre>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-9" class="paper-section content-panel section-paper" data-section-title="Section 9 — Mutation Analysis">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 9</span>
+                  <h2>Mutation Analysis</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-9" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <p>"No substitution, insertion, or deletion occurs in HBB during infection, and the reason is structural: a mature erythrocyte has already expelled its nucleus and DNA before it ever meets the parasite, so there's no gene or transcript left to alter (Alberts et al., 2022; Cowman et al., 2012) — which is also why the codons and resulting amino acid sequence are unchanged. What actually changes is quantity and integrity: the protease cascade (plasmepsins, falcipains, falcilysin, DPAP1) hydrolyzes peptide bonds in an already-correct hemoglobin molecule, cutting it down to free amino acids (Banerjee et al., 2002; Eggleson et al., 1999; Klemba et al., 2004). Mutation corrupts a blueprint before a protein exists; proteolysis destroys an already-correct finished product — the effect looks similar, but the mechanism, and the correct treatment target, are entirely different."</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="section-10" class="paper-section content-panel section-paper" data-section-title="Section 10 — Illustration of the Central Dogma">
+            <div class="panel-surface paper-card">
+              <div class="section-head paper-head">
+                <div>
+                  <span class="eyebrow">Section 10</span>
+                  <h2>Illustration of the Central Dogma</h2>
+                </div>
+                <button class="bookmark-btn" data-bookmark="section-10" type="button" aria-label="Bookmark this section">☆</button>
+              </div>
+              <div class="paper-body">
+                <div class="central-dogma-figure">
+                  <div class="dogma-title">CENTRAL DOGMA: HBB GENE TO HEMOGLOBIN (HBA)</div>
+
+                  <div class="dogma-layout">
+                    <div class="dogma-main">
+                      <div class="dogma-stage stage-init">
+                        <span class="stage-badge">1</span>
+                        <span>INITIATION</span>
+                      </div>
+
+                      <div class="dogma-stage stage-transcription">
+                        <span class="stage-badge">2</span>
+                        <span>TRANSCRIPTION</span>
+                      </div>
+
+                      <div class="dogma-stage stage-translation">
+                        <span class="stage-badge">3</span>
+                        <span>TRANSLATION</span>
+                      </div>
+
+                      <div class="dogma-stage stage-protein">
+                        <span class="stage-badge">4</span>
+                        <span>HEMOGLOBIN PROTEIN</span>
+                      </div>
+
+                      <div class="dogma-arch">
+                        <div class="dna-seq dna-top">
+                          <span class="seq-label">DNA — HBB gene (chromosome 11)</span>
+                          <div class="dna-row">5'- <span class="n a">A</span><span class="n t">T</span><span class="n g">G</span> <span class="n g">G</span><span class="n t">T</span><span class="n g">G</span> <span class="n c">C</span><span class="n a">A</span><span class="n c">C</span> <span class="n c">C</span><span class="n t">T</span><span class="n g">G</span> <span class="n a">A</span><span class="n c">C</span><span class="n t">T</span> <span class="n c">C</span><span class="n c">C</span><span class="n t">T</span> <span class="n g">G</span><span class="n a">A</span><span class="n g">G</span> <span class="n g">G</span><span class="n a">A</span><span class="n g">G</span> <span class="n a">A</span><span class="n a">A</span><span class="n g">G</span> -3'</div>
+                          <div class="dna-row template">3'- <span class="n t">T</span><span class="n a">A</span><span class="n c">C</span> <span class="n c">C</span><span class="n a">A</span><span class="n c">C</span> <span class="n g">G</span><span class="n t">T</span><span class="n g">G</span> <span class="n g">G</span><span class="n a">A</span><span class="n c">C</span> <span class="n t">T</span><span class="n g">G</span><span class="n a">A</span> <span class="n g">G</span><span class="n g">G</span><span class="n a">A</span> <span class="n c">C</span><span class="n t">T</span><span class="n c">C</span> <span class="n c">T</span><span class="n t">T</span><span class="n c">C</span> -5'</div>
+                        </div>
+
+                        <div class="rnapolymerase-row">
+                          <span class="arrow-label">RNA polymerase</span>
+                          <div class="arrow-down">↓</div>
+                        </div>
+
+                        <div class="mrna-seq">
+                          <span class="seq-label">Pre-mRNA transcript</span>
+                          <div class="dna-row">5'- <span class="n a">A</span><span class="n u">U</span><span class="n g">G</span> <span class="n g">G</span><span class="n u">U</span><span class="n g">G</span> <span class="n c">C</span><span class="n a">A</span><span class="n c">C</span> <span class="n c">C</span><span class="n u">U</span><span class="n g">G</span> <span class="n a">A</span><span class="n c">C</span><span class="n u">U</span> <span class="n c">C</span><span class="n c">C</span><span class="n u">U</span> <span class="n g">G</span><span class="n a">A</span><span class="n g">G</span> <span class="n g">G</span><span class="n a">A</span><span class="n g">G</span> <span class="n a">A</span><span class="n a">A</span><span class="n g">G</span> -3'</div>
+                        </div>
+
+                        <div class="ribosome-row">
+                          <span class="arrow-label">Ribosome</span>
+                          <div class="arrow-down">↓</div>
+                        </div>
+
+                        <div class="translation-row">
+                          <div class="codon-labels">
+                            <span>Codon</span>
+                            <span>Amino acid</span>
+                          </div>
+                          <div class="codon-strip">
+                            <span class="codon met">Met</span>
+                            <span class="codon val">Val</span>
+                            <span class="codon his">His</span>
+                            <span class="codon leu">Leu</span>
+                            <span class="codon thr">Thr</span>
+                            <span class="codon pro">Pro</span>
+                            <span class="codon glu">Glu</span>
+                            <span class="codon glu">Glu</span>
+                            <span class="codon lys">Lys</span>
+                          </div>
+                        </div>
+
+                        <div class="protein-final">
+                          <div class="protein-name">Hemoglobin (HbA) — normal, fully functional protein</div>
+                          <div class="protein-structure">
+                            <span class="heme-dot red"></span>
+                            <span class="heme-dot amber"></span>
+                            <span class="heme-dot red"></span>
+                            <span class="heme-dot amber"></span>
+                          </div>
+                          <div class="protein-subunits">2 α-globin + 2 β-globin chains</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <aside class="dogma-side">
+                      <div class="info-card card-init">
+                        <div class="info-header">1. INITIATION</div>
+                        <p>In the nucleus, RNA polymerase binds to the promoter region of the HBB gene. Transcription begins in the 3' to 5' direction, complementing the template strand.</p>
+                      </div>
+
+                      <div class="info-card card-transcription">
+                        <div class="info-header">2. TRANSCRIPTION</div>
+                        <p>Pre-mRNA is synthesized in the 5' to 3' direction, complementary to the template strand and then processed to produce mature mRNA.</p>
+                      </div>
+
+                      <div class="info-card card-translation">
+                        <div class="info-header">3. TRANSLATION</div>
+                        <p>mRNA is transported to the cytoplasm and binds to the ribosome. The ribosome reads codons and adds the corresponding amino acids to form a polypeptide chain.</p>
+                      </div>
+
+                      <div class="info-card card-protein">
+                        <div class="info-header">4. HEMOGLOBIN PROTEIN</div>
+                        <p>The polypeptide chains fold and assemble with heme groups to form functional hemoglobin in red blood cells.</p>
+                      </div>
+
+                      <div class="legend-box">
+                        <div class="legend-title">LEGEND</div>
+                        <div class="legend-grid">
+                          <span><i class="legend-dot a"></i>Adenine</span>
+                          <span><i class="legend-dot t"></i>Thymine</span>
+                          <span><i class="legend-dot g"></i>Guanine</span>
+                          <span><i class="legend-dot c"></i>Cytosine</span>
+                          <span><i class="legend-dot u"></i>Uracil</span>
+                          <span><i class="legend-dot aa"></i>Amino Acid</span>
+                          <span><i class="legend-dot heme"></i>Heme Group</span>
+                        </div>
+                      </div>
+                    </aside>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
